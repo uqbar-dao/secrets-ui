@@ -3,8 +3,10 @@ import { hooks } from "./connectors/metamask";
 import { SECRETS_ADDRESSES } from "./constants/addresses";
 import { Secrets__factory } from "./abis/types";
 import ConnectWallet from "./components/ConnectWallet";
+import Feed from './components/Feed';
 import { toDNSWireFormat } from "./utils/dnsWire";
 import { ethers } from 'ethers'
+import { ChainId } from './constants/chainId';
 
 const {
   useChainId,
@@ -23,9 +25,9 @@ function App() {
   // useEffect(() => {}, []) // TODO get ourName
   
   const postSecret = async () => {
-    console.log('foo')
+    console.log('post secret')
 
-    if (!provider || !chainId) {
+    if (!provider || !chainId || chainId != ChainId.SEPOLIA) {
       window.alert('Please connect your wallet to Sepolia')
       return false
     }
@@ -81,6 +83,7 @@ function App() {
           </div>
         </>
       }
+      <Feed />
     </>
   );
 }

@@ -1,28 +1,32 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import type { Secret } from '../types'
 import SecretBid from './SecretBid'
-import { keccak256, toUtf8Bytes } from 'ethers/lib/utils'
+import { BigNumber } from 'ethers'
 
-const testSecrets = [
-  {
-    message: 'foo',
-    messageHash: keccak256(toUtf8Bytes('foo')),
-    from: 'drew.uq',
-    topBid: null,
-    secret: 'bar',
-    time: 123
-  },
-  { message: 'message 2', messageHash: '0x456', from: 'bob.uq', topBid: null, secret: null, time: 124 },
-]
 
 export default function Feed() {
-  let [secrets, setSecrets] = useState<Secret[]>(testSecrets)
+  let [secrets, setSecrets] = useState<Secret[]>([])
+
+  useEffect(() => {
+    const fetchSecrets = async () => {
+      const res = await fetch('/secrets/feed')
+      const json = await res.json()
+      console.log("json", json['secrets'])
+      setSecrets(json['secrets'])
+    }
+
+    fetchSecrets()
+  }, [])
+
 
   return (
     <ul>
-      {secrets.map((s) => (
-        <SecretBid secret={s}></SecretBid>
-      ))}
+      {secrets
+        .sort((a, b) => BigNumber.from(b.block).sub(BigNumber.from(a.block)).toNumber())
+        .map((s) => (
+          <SecretBid key={s.message} secret={s}></SecretBid>
+        ))
+      }
     </ul>
   )
 }

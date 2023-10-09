@@ -10,5 +10,5 @@ export type Secret = {
     messageHash: string,
     topBid: Bid | null,
     secret: string | null
-    time: number,
+    block: string,
 }

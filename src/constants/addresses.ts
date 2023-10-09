@@ -3,7 +3,7 @@ import { ChainId } from './chainId'
 type AddressMap = { [chainId: number]: string }
 
 export const SECRETS_ADDRESSES : AddressMap = {
-    [ChainId.SEPOLIA]: '0x79c3e8Fe22579c7a00E9C1c2130a2F628D3D636D',
+    [ChainId.SEPOLIA]: '0xfd571a1a8Ba4bAe58f5729aF52E2ED7277ed3DF2',
 }
 
 export const WETH_ADDRESSES : AddressMap = {

@@ -32,20 +32,31 @@ function App() {
       return false
     }
 
+    // TODO if secret was already posted, reject here rather than later!
+
+    await fetch('/secrets/save-secret', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      // NOTE if this is used for other TLDs we have to change .uq
+      body: JSON.stringify({ message, secret })
+    })
+
+    console.log('after fetch')
+
     let secretsAddress = SECRETS_ADDRESSES[chainId];
     let secretsContract = Secrets__factory.connect(secretsAddress, provider.getSigner());
 
-    const messageBytes = ethers.utils.toUtf8Bytes(message);
-    const secretBytes = ethers.utils.toUtf8Bytes(secret);
-    const combinedBytes = ethers.utils.concat([messageBytes, secretBytes]);
-    const commitHash = ethers.utils.keccak256(combinedBytes);
-  
-    let signature = await provider.getSigner().signMessage(commitHash)
+    const bytesToSign = ethers.utils.solidityPack(
+      ['string', 'string'],
+      [message, secret]
+    )
+    let signature = await provider.getSigner().signMessage(ethers.utils.arrayify(bytesToSign))
 
     let tx = await secretsContract.commitSecret(message, signature, toDNSWireFormat(ourName))
     await tx.wait();
 
     console.log('done', tx.hash)
+    window.alert(`success! here is your transaction hash: ${tx.hash}`)
   }
 
   // const revealSecret = async () => {

@@ -65,7 +65,10 @@ export default function SecretBid({ secret }: SecretBidProps) {
       return false
     }
 
-    if (!secret.secret) {
+    const res = await fetch('/secrets/my-secrets/')
+    const json: Record<string, string> = await res.json()
+
+    if (!json[secret.message]) {
       window.alert('No secret to reveal')
       return false
     }
@@ -73,7 +76,10 @@ export default function SecretBid({ secret }: SecretBidProps) {
     let secretsAddress = SECRETS_ADDRESSES[chainId];
     let secretsContract = Secrets__factory.connect(secretsAddress, provider.getSigner());
 
-    let tx = await secretsContract.revealSecret(secret.message, secret.secret!, toDNSWireFormat(ourName))
+    let tx = await secretsContract.revealSecret(
+        secret.message,
+        json[secret.message],
+        toDNSWireFormat(ourName))
     await tx.wait();
   }
 

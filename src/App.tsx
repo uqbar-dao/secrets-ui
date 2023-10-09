@@ -20,7 +20,6 @@ function App() {
   let provider = useProvider();
   const [message, setMessage] = useState('')
   const [secret, setSecret] = useState('')
-  const [ourName, setOurName] = useState('drew.uq') // TODO
 
   // useEffect(() => {}, []) // TODO get ourName
   
@@ -52,7 +51,7 @@ function App() {
     )
     let signature = await provider.getSigner().signMessage(ethers.utils.arrayify(bytesToSign))
 
-    let tx = await secretsContract.commitSecret(message, signature, toDNSWireFormat(ourName))
+    let tx = await secretsContract.commitSecret(message, signature, toDNSWireFormat((window as any).node))
     await tx.wait();
 
     console.log('done', tx.hash)
@@ -80,21 +79,21 @@ function App() {
         !provider? <ConnectWallet /> :
         !(chainId in SECRETS_ADDRESSES)? <p>change networks</p> :
         <>
-          <div>
+          <div className="row">
+            { accounts && <p style={{textAlign: 'center'}}>{accounts[0]}</p> }
+          </div>
+          <div className="post-form">
             {/* post bar at the top to make a new secret */}
-            { accounts && <p>{accounts[0]}</p> }
-            <input id="message" value={message} onChange={e => setMessage(e.target.value)} />
             <label htmlFor="message">Message</label>
-            <input id="secret" value={secret} onChange={e => setSecret(e.target.value)} />
+            <input id="message" value={message} onChange={e => setMessage(e.target.value)} />
             <label htmlFor="secret">Secret</label>
-            <button onClick={postSecret}>Set Secret</button>
+            <input id="secret" value={secret} onChange={e => setSecret(e.target.value)} />
+            <button onClick={postSecret}>Post</button>
           </div>
-          <div>
-            {/* feed of all secrets */}
-          </div>
+          <Feed />
         </>
       }
-      <Feed />
+      
     </>
   );
 }

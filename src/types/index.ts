@@ -1,7 +1,7 @@
 export type Bid = {
     from: string,
-    amount: number, // TODO bignumber bc wei
-    time: number, // block number
+    amount: string, // TODO bignumber bc wei
+    block: string, // block number
 }
 
 export type Secret = {

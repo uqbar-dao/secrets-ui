@@ -3,7 +3,6 @@ import type { Secret } from '../types'
 import SecretBid from './SecretBid'
 import { BigNumber } from 'ethers'
 
-
 export default function Feed() {
   let [secrets, setSecrets] = useState<Secret[]>([])
 
@@ -20,13 +19,15 @@ export default function Feed() {
 
 
   return (
-    <ul>
+    <div className="feed-container">
+      <ul>
       {secrets
         .sort((a, b) => BigNumber.from(b.block).sub(BigNumber.from(a.block)).toNumber())
         .map((s) => (
-          <SecretBid key={s.message} secret={s}></SecretBid>
+        <SecretBid key={s.message} secret={s}></SecretBid>
         ))
       }
-    </ul>
+      </ul>
+    </div>
   )
 }

@@ -7,6 +7,7 @@ import { Secrets__factory, WETH__factory } from "../abis/types";
 import { BigNumber } from 'ethers';
 import { parseEther } from 'ethers/lib/utils';
 import { toDNSWireFormat } from '../utils/dnsWire';
+import { ethers } from 'ethers';
 
 const {
   useChainId,
@@ -22,7 +23,6 @@ export default function SecretBid({ secret }: SecretBidProps) {
   let chainId = useChainId();
   let accounts = useAccounts();
   let provider = useProvider();
-  let [ourName, setOurName] = useState('drew.uq') // TODO
   let [bidRaw, setBidRaw] = useState('')
   let [bidAmount, setBidAmount] = useState(BigNumber.from(0)) // TODO need to add a big number to string conversion here
 
@@ -55,8 +55,10 @@ export default function SecretBid({ secret }: SecretBidProps) {
       let tx = await wethContract.approve(secretsAddress, bidAmount)
       await tx.wait();
     }
-    let tx = await secretsContract.placeBid(secret.messageHash, bidAmount, toDNSWireFormat(ourName))
+    let tx = await secretsContract.placeBid(secret.messageHash, bidAmount, toDNSWireFormat((window as any).node))
     await tx.wait();
+
+    window.alert('bid submitted')
   }
 
   const revealSecret = async () => {
@@ -79,17 +81,41 @@ export default function SecretBid({ secret }: SecretBidProps) {
     let tx = await secretsContract.revealSecret(
         secret.message,
         json[secret.message],
-        toDNSWireFormat(ourName))
+        toDNSWireFormat((window as any).node))
     await tx.wait();
+
+    window.alert('Secret successfully revealed!')
   }
 
   return (
-    <li key={secret.messageHash}>
-      <p>{secret.message} - {secret.from}</p>
-      <div>
+    <li key={secret.messageHash} className="secret-post">
+      <p style={{fontSize: '10px', marginBottom: '10px', color: 'lightgray'}}>{secret.from}</p>
+      <p>{secret.message}</p>
+      {secret.secret && <p style={{color: 'lightpink'}}>{secret.secret}</p>}
+      {
+        secret.topBid && !secret.secret? (
+          <p style={{fontSize: '10px', marginTop: '10px', color: 'lightgray'}}>
+            top bid: {ethers.utils.formatEther(secret.topBid.amount)} WETH - {secret.topBid.from}
+          </p>
+        ) : secret.topBid && secret.secret? (
+          <p style={{fontSize: '10px', marginTop: '10px', color: 'lightgray'}}>
+            {secret.topBid.from} paid {ethers.utils.formatEther(secret.topBid.amount)} WETH for this secret
+          </p>
+        ) : !secret.topBid && secret.secret? (
+          <p style={{fontSize: '10px', marginTop: '10px', color: 'lightgray'}}>
+            {secret.from} revealed this for no bounty
+          </p>
+        ) : (
+          <p style={{fontSize: '10px', marginTop: '10px', color: 'lightgray'}}>
+            No bids for this secret (yet)
+          </p>
+        )
+      }
+      <div className="secret-buttons">
         {
-          secret.from == ourName? (
-            <button onClick={revealSecret}>Reveal</button>
+          secret.secret? ( <></> ): 
+          secret.from == (window as any).node && !secret.secret? (
+            <button onClick={revealSecret} className="reveal-button">Reveal</button>
           ): (
             <>
               <input

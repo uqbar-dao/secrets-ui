@@ -1,13 +1,155 @@
+:root {
+    --uq-vlightpurple: #d9dcfc;
+    --uq-lightpurple: #c7cafa;
+    --uq-purple: #727bf2;
+    --uq-darkpurple: #5761ef;
+    --midnightpurp: #0a1170;
+    --forgottenpurp: #45475e;
+    --uq-lightpink: #f3ced2;
+    --uq-pink: #dd7c8a;
+    --uq-darkpink: #cd3c52;
+    --blush: #d55d6f;
+    --celeste: #adebe5;
+    --lturq: #6bdbd0;
+    --turq: #3acfc0;
+    --celadon: #21897e;
+    --deep-jungle: #14524c;
+    --old-mint: #659792;
+    --washed-gray: rgba(0, 0, 0, 0.03);
+    --light-gray: rgba(0, 0, 0, 0.1);
+    --medium-gray: rgba(0, 0, 0, 0.2);
+    --dark-gray: rgba(0, 0, 0, 0.5);
+    --charcoal: #333;
+  }
+
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    font-family: 'Press Start 2P';
+    background-color: #027;
+    color: white;
+  }
+
+  button {
+    width: 100%;
+    padding: 1em;
+    margin-bottom: 0.5em;
+    border: 1px solid var(--uq-pink);
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: var(--uq-pink);
+    cursor: pointer;
+    font-size: 1em;
+    transition: all 0.1s;
+    box-shadow: 0 1px 2px var(--uq-darkpink);
+    font-family: "Press Start 2P";
+    color: white;
+    margin-top: 1em;
+  }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.feed-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Style each secret post */
+  .secret-post {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+    max-width: 500px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .secret-post p {
+    margin: 5px 0;
+  }
+  
+  .secret-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  /* Style the buttons */
+  .secret-buttons button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* Style the reveal button */
+  .secret-buttons .reveal-button {
+    background-color: #28a745;
+  }
+  
+  /* Style the bid input */
+  .secret-buttons input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    margin-right: 5px;
+  }
+
+
+  
+
+
+
+
+
+  .post-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px auto;
+    min-width: 400px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .post-form label {
+    margin-top: 10px;
+  }
+  
+  .post-form input {
+    padding: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    width: 100%;
+  }
+  
+  .post-form button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0px;
+  }
+
+  .row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
